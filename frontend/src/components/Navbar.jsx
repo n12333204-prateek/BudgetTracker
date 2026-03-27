@@ -11,12 +11,15 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-blue-600 text-white p-4 flex justify-between items-center">
-      <Link to="/" className="text-2xl font-bold">BudgetTracker</Link>
+    <nav className="bg-blue-700 text-white p-4 flex justify-between items-center">
+      <Link to="/dashboard" className="text-2xl font-bold">BudgetTracker</Link>
       <div>
         {user ? (
           <>
-            <Link to="/tasks" className="mr-4">CRUD</Link>
+            <Link to="/dashboard" className="mr-4">Dashboard</Link>
+            <Link to="/expenses" className="mr-4">Expenses</Link>
+            <Link to="/income" className="mr-4">Income</Link>
+            <Link to="/budgets" className="mr-4">Budgets</Link>
             <Link to="/profile" className="mr-4">Profile</Link>
             <button
               onClick={handleLogout}
@@ -28,10 +31,7 @@ const Navbar = () => {
         ) : (
           <>
             <Link to="/login" className="mr-4">Login</Link>
-            <Link
-              to="/register"
-              className="bg-green-500 px-4 py-2 rounded hover:bg-green-700"
-            >
+            <Link to="/register" className="bg-green-500 px-4 py-2 rounded hover:bg-green-700">
               Register
             </Link>
           </>
