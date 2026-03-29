@@ -100,7 +100,7 @@ const Income = () => {
         {incomes.map(income => (
           <div key={income._id} className="bg-white p-4 shadow rounded mb-3 flex justify-between items-center">
             <div>
-              <p className="font-bold">{income.source} — ${income.amount}</p>
+              <p className="font-bold">{income.source} - ${income.amount}</p>
               <p className="text-sm text-gray-500">{new Date(income.date).toLocaleDateString()}</p>
               {income.description && <p className="text-sm">{income.description}</p>}
             </div>

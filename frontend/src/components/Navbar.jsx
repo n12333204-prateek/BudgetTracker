@@ -11,7 +11,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-blue-700 text-white p-4 flex justify-between items-center">
+    <nav style={{backgroundColor: '#1E3A5F'}} className="text-white p-4 flex justify-between items-center">
       <Link to="/dashboard" className="text-2xl font-bold">BudgetTracker</Link>
       <div>
         {user ? (

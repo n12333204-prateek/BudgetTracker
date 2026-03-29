@@ -83,7 +83,7 @@ const Expenses = () => {
           value={formData.description}
           onChange={e => setFormData({ ...formData, description: e.target.value })}
           className="w-full mb-3 p-2 border rounded" />
-        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded">
+        <button type="submit" className="w-full bg-red-600 text-white p-2 rounded">
           {editingId ? 'Update Expense' : 'Add Expense'}
         </button>
         {editingId && (
@@ -100,7 +100,7 @@ const Expenses = () => {
         {expenses.map(expense => (
           <div key={expense._id} className="bg-white p-4 shadow rounded mb-3 flex justify-between items-center">
             <div>
-              <p className="font-bold">{expense.category} — ${expense.amount}</p>
+              <p className="font-bold">{expense.category} - <span className="text-red-600">${expense.amount}</span></p>
               <p className="text-sm text-gray-500">{new Date(expense.date).toLocaleDateString()}</p>
               {expense.description && <p className="text-sm">{expense.description}</p>}
             </div>

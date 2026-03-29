@@ -66,9 +66,12 @@ const Budgets = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-6">Budget Management</h1>
-      <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded mb-6">
-        <h2 className="text-lg font-bold mb-4">{editingId ? 'Edit Budget' : 'Create Budget'}</h2>
+      <h1 className="text-2xl font-bold mb-6 text-gray-800">Budget Management</h1>
+
+      <form onSubmit={handleSubmit} className="bg-white p-6 shadow rounded-lg mb-6">
+        <h2 className="text-lg font-bold mb-4 text-gray-700">
+          {editingId ? 'Edit Budget' : 'Create Budget'}
+        </h2>
         <input type="text" placeholder="Category (e.g. Food, Transport)"
           value={formData.category}
           onChange={e => setFormData({ ...formData, category: e.target.value })}
@@ -88,39 +91,66 @@ const Budgets = () => {
         <input type="date" value={formData.startDate}
           onChange={e => setFormData({ ...formData, startDate: e.target.value })}
           className="w-full mb-3 p-2 border rounded" required />
-        <button type="submit" className="w-full bg-purple-600 text-white p-2 rounded">
+        <button type="submit" className="w-full bg-purple-600 text-white p-2 rounded hover:bg-purple-700">
           {editingId ? 'Update Budget' : 'Create Budget'}
         </button>
         {editingId && (
           <button type="button"
             onClick={() => { setEditingId(null); setFormData({ category: '', limitAmount: '', timePeriod: '', startDate: '' }); }}
-            className="w-full mt-2 bg-gray-400 text-white p-2 rounded">
+            className="w-full mt-2 bg-gray-400 text-white p-2 rounded hover:bg-gray-500">
             Cancel
           </button>
         )}
       </form>
 
       <div>
-        {budgets.length === 0 && <p className="text-gray-500">No budgets yet.</p>}
-        {budgets.map(budget => (
-          <div key={budget._id} className="bg-white p-4 shadow rounded mb-3">
-            <div className="flex justify-between items-center mb-2">
-              <div>
-                <p className="font-bold">{budget.category} — ${budget.limitAmount} limit</p>
-                <p className="text-sm text-gray-500">
-                  {budget.timePeriod} · Started {new Date(budget.startDate).toLocaleDateString()}
-                </p>
-                <p className="text-sm">Spent: ${budget.spentAmount} / ${budget.limitAmount}</p>
+        {budgets.length === 0 && (
+          <p className="text-gray-500 text-center py-8">No budgets yet. Create one above.</p>
+        )}
+        {budgets.map(budget => {
+          const percentage = budget.limitAmount > 0
+            ? Math.min(100, Math.round((budget.spentAmount / budget.limitAmount) * 100))
+            : 0;
+          const barColor = percentage >= 100 ? 'bg-red-500' : percentage >= 80 ? 'bg-yellow-500' : 'bg-green-500';
+
+          return (
+            <div key={budget._id} className="bg-white p-4 shadow rounded-lg mb-3">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <p className="font-bold text-gray-800">
+                    {budget.category} · <span className="text-purple-600">${budget.limitAmount} limit</span>
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    {budget.timePeriod} · Started {new Date(budget.startDate).toLocaleDateString()}
+                  </p>
+                  <p className="text-sm mt-1">
+                    Spent: <span className="font-semibold text-red-600">${budget.spentAmount}</span>
+                    {' '}/ ${budget.limitAmount}
+                    {' '}· Remaining: <span className="font-semibold text-green-600">
+                      ${Math.max(0, budget.limitAmount - budget.spentAmount)}
+                    </span>
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => handleEdit(budget)}
+                    className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm">
+                    Edit
+                  </button>
+                  <button onClick={() => handleDelete(budget._id)}
+                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 text-sm">
+                    Delete
+                  </button>
+                </div>
               </div>
-              <div>
-                <button onClick={() => handleEdit(budget)}
-                  className="bg-yellow-500 text-white px-3 py-1 rounded mr-2">Edit</button>
-                <button onClick={() => handleDelete(budget._id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded">Delete</button>
+              <div className="w-full bg-gray-200 rounded h-2 mt-3">
+                <div className={`h-2 rounded ${barColor} transition-all`}
+                  style={{ width: `${percentage}%` }}>
+                </div>
               </div>
+              <p className="text-xs text-right mt-1 text-gray-500">{percentage}% used</p>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
